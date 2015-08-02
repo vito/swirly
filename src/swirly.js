@@ -116,6 +116,14 @@ var StackGroup = React.createClass({
       }
     }
 
+    if (this.props.data.location.path === undefined) {
+      return (
+          <div className="root-group">
+            {subGroups}
+          </div>
+      );
+    }
+
     var classes = ["stack-group"];
     if (this.props.data.location.path.match(boringRegex)) {
       classes.push("boring");
@@ -169,7 +177,7 @@ function parseGoroutines(dumpLines) {
 }
 
 function goroutineGroups(goroutines) {
-  var rootGroup = new GoroutineGroup({call: "(root)", path: "(root)"});
+  var rootGroup = new GoroutineGroup({});
 
   for (var i in goroutines) {
     goroutines[i].registerIn(rootGroup);
@@ -182,10 +190,12 @@ var atcExample;
 
 function react() {
   var goroutines = parseGoroutines(atcExample.split("\n"));
-  var groups = goroutineGroups(goroutines);
+  var rootGroup = goroutineGroups(goroutines);
 
   React.render(
-    <StackGroup data={groups} />,
+    <div className="swirly">
+      <StackGroup data={rootGroup} />
+    </div>,
     document.getElementById('dumps')
   );
 }
