@@ -1,5 +1,3 @@
-// TODO: embolden non-stdlib entries in call stack
-
 function GoroutineGroup(location) {
   this.location = location;
   this.goroutines = [];
@@ -25,7 +23,6 @@ GoroutineStack.prototype.pushStackLine = function(line) {
 
 var callArgRegex = /\(((0x[a-f0-9]+|\.\.\.)(, )?)+\)/;
 var locationRegex = /\t([^\s]+) .*$/;
-var boringRegex = /src\/([a-z]+)\//;
 
 GoroutineStack.prototype.registerIn = function(group) {
   var stackLines = this.stack.split("\n");
@@ -93,6 +90,7 @@ var Goroutine = React.createClass({
   }
 });
 
+var boringRegex = /src\/([a-z]+)\//;
 var StackGroup = React.createClass({
   getInitialState: function() {
     return {expanded: true};
