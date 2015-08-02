@@ -135,8 +135,44 @@ var StackGroup = React.createClass({
             <h2>{this.props.data.packagePath()}</h2>
             <h1>{this.props.data.location.call}</h1>
           </div>
-          {goroutines}
-          {subGroups}
+          <div className="stack-content">
+            {goroutines}
+            {subGroups}
+          </div>
+        </div>
+    );
+  }
+});
+
+var Root = React.createClass({
+  getInitialState: function() {
+    return {filter: ""}
+  },
+
+  handleFilter: function(event) {
+    this.setState({filter: event.target.value});
+  },
+
+  render: function() {
+    var filteredGoroutines = [];
+    for (var i in this.props.goroutines) {
+      var goroutine = this.props.goroutines[i];
+      if (goroutine.stack.indexOf(this.state.filter) == -1) {
+        continue;
+      }
+
+      filteredGoroutines.push(goroutine);
+    }
+
+    var rootGroup = goroutineGroups(filteredGoroutines);
+
+    return (
+        <div className="swirly">
+          <div className="filter">
+            <input type="text" placeholder="filter..." onChange={this.handleFilter} />
+          </div>
+
+          <StackGroup data={rootGroup} />
         </div>
     );
   }
@@ -190,12 +226,9 @@ var atcExample;
 
 function react() {
   var goroutines = parseGoroutines(atcExample.split("\n"));
-  var rootGroup = goroutineGroups(goroutines);
 
   React.render(
-    <div className="swirly">
-      <StackGroup data={rootGroup} />
-    </div>,
+    <Root goroutines={goroutines} />,
     document.getElementById('dumps')
   );
 }
