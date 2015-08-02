@@ -3,10 +3,33 @@
   <head>
     <meta charset="UTF-8" />
     <title>Swirly</title>
+    <script src="build/jquery.js"></script>
     <script src="build/react.js"></script>
     <style type="text/css">
       body {
         font-family: monospace;
+      }
+
+      .controls {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 50px;
+        background: #eee;
+        z-index: 300;
+      }
+
+      .controls .filter {
+        float: right;
+      }
+
+      .controls input {
+        vertical-align: top;
+      }
+
+      .goroutines {
+        margin-top: 50px;
       }
 
       .stack-group {
