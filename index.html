@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Swirly</title>
+    <script src="build/react.js"></script>
+    <style type="text/css">
+      body {
+        font-family: monospace;
+      }
+
+      .stack-group {
+        background: rgba(0, 0, 0, .0125);
+        padding: 5px 0 5px 10px;
+      }
+
+      .stack-group.boring > .title {
+        opacity: 0.5;
+      }
+
+      .stack-group h1 {
+        font-size: 12px;
+        margin: 0 0 10px;
+        padding: 0;
+      }
+
+      .stack-group h2 {
+        float: right;
+        font-size: 12px;
+        margin: 0 10px 10px 0;
+        padding: 0;
+      }
+
+      .goroutine {
+        display: inline-block;
+        margin: 0 5px 5px 0;
+        padding: 10px;
+        background: rgba(0, 0, 0, .25);
+        position: relative;
+      }
+
+      .goroutine.waiting, .goroutine.waiting .id {
+        background: rgba(255, 0, 0, 0.25);
+      }
+
+      .goroutine .id {
+        background: rgba(0, 0, 0, .25);
+        padding: 5px;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+
+      .goroutine .stack-trace {
+        visibility: hidden;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background: #000;
+        color: #fff;
+        padding: 10px;
+        margin: 0;
+        z-index: 100;
+      }
+
+      .goroutine:hover .stack-trace {
+        visibility: visible;
+      }
+
+      .current-location {
+        cursor: pointer;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="dumps"></div>
+    <script src="build/swirly.js"></script>
+  </body>
+</html>
