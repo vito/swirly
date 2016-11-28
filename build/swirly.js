@@ -28,7 +28,7 @@ GoroutineStack.prototype.matchesFilter = function(filter) {
 };
 
 var callArgRegex = /\(((0x[a-f0-9]+|\.\.\.)(, )?)+\)/;
-var locationRegex = /\t([^\s]+) .*$/;
+var locationRegex = /\t([^\s]+)( .*)?$/;
 
 GoroutineStack.prototype.registerIn = function(group) {
   var stackLines = this.stack.split("\n");
