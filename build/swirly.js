@@ -35,7 +35,7 @@ GoroutineStack.prototype.registerIn = function(group) {
   if (stackLines[stackLines.length - 1] == "") {
     stackLines.pop();
   }
- 
+
   var elidedIdx = stackLines.indexOf("...additional frames elided...");
   if (elidedIdx != -1) {
     stackLines.splice(elidedIdx, 1);
@@ -83,7 +83,7 @@ GoroutineStack.prototype.waitInSeconds = function() {
   }
 };
 
-var Goroutine = React.createClass({
+var Goroutine = React.createClass({displayName: "Goroutine",
   render: function() {
     var classes = ["goroutine"];
     if (this.props.data.waiting) {
@@ -91,18 +91,18 @@ var Goroutine = React.createClass({
     }
 
     return (
-        <div className={classes.join(" ")}>
-          <div className="id">#{this.props.data.id}</div>
-          <div className="status">{this.props.data.state}</div>
-          <div className="waiting">{this.props.data.waiting}</div>
-          <pre className="stack-trace">{this.props.data.stack}</pre>
-        </div>
+        React.createElement("div", {className: classes.join(" ")}, 
+          React.createElement("div", {className: "id"}, "#", this.props.data.id), 
+          React.createElement("div", {className: "status"}, this.props.data.state), 
+          React.createElement("div", {className: "waiting"}, this.props.data.waiting), 
+          React.createElement("pre", {className: "stack-trace"}, this.props.data.stack)
+        )
     );
   }
 });
 
 var boringRegex = /src\/([a-z]+)\//;
-var StackGroup = React.createClass({
+var StackGroup = React.createClass({displayName: "StackGroup",
   getInitialState: function() {
     return {expanded: true};
   },
@@ -118,20 +118,20 @@ var StackGroup = React.createClass({
     if (this.state.expanded) {
       for (var i in this.props.data.groups) {
         var group = this.props.data.groups[i];
-        subGroups.push(<StackGroup key={group.location.path} data={group} />);
+        subGroups.push(React.createElement(StackGroup, {key: group.location.path, data: group}));
       }
 
       for (var i in this.props.data.goroutines) {
         var goroutine = this.props.data.goroutines[i];
-        goroutines.push(<Goroutine key={goroutine.id} data={goroutine} />);
+        goroutines.push(React.createElement(Goroutine, {key: goroutine.id, data: goroutine}));
       }
     }
 
     if (this.props.data.location.path === undefined) {
       return (
-          <div className="root-group">
-            {subGroups}
-          </div>
+          React.createElement("div", {className: "root-group"}, 
+            subGroups
+          )
       );
     }
 
@@ -141,21 +141,21 @@ var StackGroup = React.createClass({
     }
 
     return (
-        <div className={classes.join(" ")}>
-          <div className="title" onClick={this.handleToggle}>
-            <h2>{this.props.data.packagePath()}</h2>
-            <h1>{this.props.data.location.call}</h1>
-          </div>
-          <div className="stack-content">
-            {goroutines}
-            {subGroups}
-          </div>
-        </div>
+        React.createElement("div", {className: classes.join(" ")}, 
+          React.createElement("div", {className: "title", onClick: this.handleToggle}, 
+            React.createElement("h2", null, this.props.data.packagePath()), 
+            React.createElement("h1", null, this.props.data.location.call)
+          ), 
+          React.createElement("div", {className: "stack-content"}, 
+            goroutines, 
+            subGroups
+          )
+        )
     );
   }
 });
 
-var Root = React.createClass({
+var Root = React.createClass({displayName: "Root",
   getInitialState: function() {
     return {
       filter: "",
@@ -204,27 +204,27 @@ var Root = React.createClass({
     var rootGroup = goroutineGroups(filteredGoroutines);
 
     return (
-        <div className="swirly">
-          <div className="controls">
-            <div className="filter">
-              <input type="text" placeholder="filter..." onChange={this.handleFilter} />
-            </div>
+        React.createElement("div", {className: "swirly"}, 
+          React.createElement("div", {className: "controls"}, 
+            React.createElement("div", {className: "filter"}, 
+              React.createElement("input", {type: "text", placeholder: "filter...", onChange: this.handleFilter})
+            ), 
 
-            <form className="fetch" onSubmit={this.handleFetch}>
-              <input type="text" placeholder="url" ref="url" />
-              <input type="submit" value="fetch" />
-            </form>
+            React.createElement("form", {className: "fetch", onSubmit: this.handleFetch}, 
+              React.createElement("input", {type: "text", placeholder: "url", ref: "url"}), 
+              React.createElement("input", {type: "submit", value: "fetch"})
+            ), 
 
-            <form className="dump" onSubmit={this.handleDump}>
-              <textarea rows="1" type="text" placeholder="dump" ref="dump" />
-              <input type="submit" value="set" />
-            </form>
-          </div>
+            React.createElement("form", {className: "dump", onSubmit: this.handleDump}, 
+              React.createElement("textarea", {rows: "1", type: "text", placeholder: "dump", ref: "dump"}), 
+              React.createElement("input", {type: "submit", value: "set"})
+            )
+          ), 
 
-          <div className="goroutines">
-            <StackGroup data={rootGroup} />
-          </div>
-        </div>
+          React.createElement("div", {className: "goroutines"}, 
+            React.createElement(StackGroup, {data: rootGroup})
+          )
+        )
     );
   }
 });
@@ -275,6 +275,6 @@ function goroutineGroups(goroutines) {
 }
 
 React.render(
-  <Root />,
+  React.createElement(Root, null),
   document.getElementById('dumps')
 );
