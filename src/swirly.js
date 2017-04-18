@@ -35,6 +35,11 @@ GoroutineStack.prototype.registerIn = function(group) {
   if (stackLines[stackLines.length - 1] == "") {
     stackLines.pop();
   }
+ 
+  var elidedIdx = stackLines.indexOf("...additional frames elided...");
+  if (elidedIdx != -1) {
+    stackLines.splice(elidedIdx, 1);
+  }
 
   for (var i = stackLines.length - 2; i >= 0; i -= 2) {
     var call = stackLines[i];
