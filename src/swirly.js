@@ -229,7 +229,7 @@ var Root = React.createClass({
   }
 });
 
-var goroutineHeaderRegex = /^goroutine (\d+) \[([^,\]]+)(, ([^,\]]+))?(, locked to thread)?\]:$/
+var goroutineHeaderRegex = /^goroutine (\d+) [^\[]*\[([^,\]]+)(, ([^,\]]+))?(, locked to thread)?\]:$/
 function parseGoroutines(dump) {
   var dumpLines = dump.split("\n");
   var goroutines = [];
