@@ -43,7 +43,7 @@ GoroutineStack.prototype.registerIn = function(group) {
 
   for (var i = stackLines.length - 2; i >= 0; i -= 2) {
     var call = stackLines[i];
-    var path = stackLines[i+1];
+    var path = stackLines[i + 1];
 
     var pathMatch = path.match(locationRegex);
 
@@ -71,15 +71,15 @@ GoroutineStack.prototype.waitInSeconds = function() {
   var n = parseInt(s[0], 10);
 
   switch (s[1]) {
-  case "hours":
-    return n * 60 * 60;
-  case "minutes": // only unit actually reported
-    return n * 60;
-  case "seconds":
-    return n;
-  default:
-    console.log("unknown unit:", s[1]);
-    return 0;
+    case "hours":
+      return n * 60 * 60;
+    case "minutes": // only unit actually reported
+      return n * 60;
+    case "seconds":
+      return n;
+    default:
+      console.log("unknown unit:", s[1]);
+      return 0;
   }
 };
 
@@ -91,12 +91,12 @@ var Goroutine = React.createClass({
     }
 
     return (
-        <div className={classes.join(" ")}>
-          <div className="id">#{this.props.data.id}</div>
-          <div className="status">{this.props.data.state}</div>
-          <div className="waiting">{this.props.data.waiting}</div>
-          <pre className="stack-trace">{this.props.data.stack}</pre>
-        </div>
+      <div className={classes.join(" ")}>
+        <div className="id">#{this.props.data.id}</div>
+        <div className="status">{this.props.data.state}</div>
+        <div className="waiting">{this.props.data.waiting}</div>
+        <pre className="stack-trace">{this.props.data.stack}</pre>
+      </div>
     );
   }
 });
@@ -104,11 +104,11 @@ var Goroutine = React.createClass({
 var boringRegex = /src\/([a-z]+)\//;
 var StackGroup = React.createClass({
   getInitialState: function() {
-    return {expanded: true};
+    return { expanded: true };
   },
 
   handleToggle: function() {
-    this.setState({expanded: !this.state.expanded});
+    this.setState({ expanded: !this.state.expanded });
   },
 
   render: function() {
@@ -129,9 +129,9 @@ var StackGroup = React.createClass({
 
     if (this.props.data.location.path === undefined) {
       return (
-          <div className="root-group">
-            {subGroups}
-          </div>
+        <div className="root-group">
+          {subGroups}
+        </div>
       );
     }
 
@@ -141,16 +141,16 @@ var StackGroup = React.createClass({
     }
 
     return (
-        <div className={classes.join(" ")}>
-          <div className="title" onClick={this.handleToggle}>
-            <h2>{this.props.data.packagePath()}</h2>
-            <h1>{this.props.data.location.call}</h1>
-          </div>
-          <div className="stack-content">
-            {goroutines}
-            {subGroups}
-          </div>
+      <div className={classes.join(" ")}>
+        <div className="title" onClick={this.handleToggle}>
+          <h2>{this.props.data.packagePath()}</h2>
+          <h1>{this.props.data.location.call}</h1>
         </div>
+        <div className="stack-content">
+          {goroutines}
+          {subGroups}
+        </div>
+      </div>
     );
   }
 });
@@ -164,7 +164,7 @@ var Root = React.createClass({
   },
 
   handleFilter: function(event) {
-    this.setState({filter: event.target.value});
+    this.setState({ filter: event.target.value });
   },
 
   handleFetch: function(event) {
@@ -175,7 +175,7 @@ var Root = React.createClass({
     $.ajax({
       url: url,
       success: function(response) {
-        root.setState({goroutines: parseGoroutines(response)});
+        root.setState({ goroutines: parseGoroutines(response) });
       }
     });
 
@@ -184,7 +184,7 @@ var Root = React.createClass({
 
   handleDump: function(event) {
     var dump = React.findDOMNode(this.refs.dump).value;
-    this.setState({goroutines: parseGoroutines(dump)});
+    this.setState({ goroutines: parseGoroutines(dump) });
 
     // clear textarea; seems to kill performance if it keeps the data in there
     React.findDOMNode(this.refs.dump).value = "";
@@ -204,27 +204,27 @@ var Root = React.createClass({
     var rootGroup = goroutineGroups(filteredGoroutines);
 
     return (
-        <div className="swirly">
-          <div className="controls">
-            <div className="filter">
-              <input type="text" placeholder="filter..." onChange={this.handleFilter} />
-            </div>
-
-            <form className="fetch" onSubmit={this.handleFetch}>
-              <input type="text" placeholder="url" ref="url" />
-              <input type="submit" value="fetch" />
-            </form>
-
-            <form className="dump" onSubmit={this.handleDump}>
-              <textarea rows="1" type="text" placeholder="dump" ref="dump" />
-              <input type="submit" value="set" />
-            </form>
+      <div className="swirly">
+        <div className="controls">
+          <div className="filter">
+            <input type="text" placeholder="filter..." onChange={this.handleFilter} />
           </div>
 
-          <div className="goroutines">
-            <StackGroup data={rootGroup} />
-          </div>
+          <form className="fetch" onSubmit={this.handleFetch}>
+            <input type="text" placeholder="url" ref="url" />
+            <input type="submit" value="fetch" />
+          </form>
+
+          <form className="dump" onSubmit={this.handleDump}>
+            <textarea rows="1" type="text" placeholder="dump" ref="dump" />
+            <input type="submit" value="set" />
+          </form>
         </div>
+
+        <div className="goroutines">
+          <StackGroup data={rootGroup} />
+        </div>
+      </div>
     );
   }
 });
